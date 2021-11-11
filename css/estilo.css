@@ -51,18 +51,27 @@ header ion-icon {
 .mensagem {
     display: flex;
 
-    background-color: #DCDCDC;
     border-radius: 2px;
-
+    background-color: #FFFFFF;
+    
     font-size: 14px;
+    margin: 5px 0;
     display: flex;
     align-items: center;
-
+    
     padding-bottom: 4px;
 }
 
 .mensagem span {
     color: #AAAAAA;
+}
+
+.privado{
+    background-color: #FFDEDE;
+}
+
+.status{
+    background-color: #DCDCDC;
 }
 
 .barra-mensagens {
