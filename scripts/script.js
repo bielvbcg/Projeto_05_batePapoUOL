@@ -1,4 +1,4 @@
-let mensagensVelhas = [];
+let ultimaMensagem = "";
 
 function buscarMensagens()
 {
@@ -10,36 +10,50 @@ function popularChat(promessa)
 {
   const mensagens = promessa.data;
   const chat = document.querySelector(".chat");
+  const tempoMensagemNova = mensagens[mensagens.length - 1];
   
-  for (let i = 0 ; i < 100 ; i++ )
+  if (ultimaMensagem.time === tempoMensagemNova.time){return;}
+  ultimaMensagem = mensagens[mensagens.length - 1];
+
+  chat.innerHTML = "";
+  
+  for (let i = 0 ; i < mensagens.length ; i++ )
   {
     const mensagemAtual = mensagens[i];
-
-    if (mensagemAtual.type === "message")
-    {
-      chat.innerHTML += `
-      <div class="mensagem" data-identifier="message">
-        <span>(${mensagemAtual.time}) </span>
-        <p><strong>${mensagemAtual.from}</strong> Para <strong>${mensagemAtual.to}<strong>: ${mensagemAtual.text}</p>
-      </div>`;
-    }
-
-    else if (mensagemAtual.type === "private_message")
-    {
-      chat.innerHTML += `
-      <div class="mensagem privado" data-identifier="message">
-        <span>(${mensagemAtual.time}) </span>
-        <p><strong>${mensagemAtual.from}</strong> reservadamente para <strong>${mensagemAtual.to}<strong> ${mensagemAtual.text}</p>
-      </div>`;
-    }
     
-    else if (mensagemAtual.type === "status")
+    switch (mensagemAtual.type) 
     {
-      chat.innerHTML += `
-      <div class="mensagem status" data-identifier="message">
-        <span>(${mensagemAtual.time}) </span>
-        <p><strong>${mensagemAtual.from}</strong> ${mensagemAtual.text}</p>
-      </div>`;
+      case "message":
+        
+        chat.innerHTML += `
+        <div class="mensagem" data-identifier="message">
+          <span>(${mensagemAtual.time}) </span>
+          <p><strong>${mensagemAtual.from}</strong> Para <strong>${mensagemAtual.to}<strong>: ${mensagemAtual.text}</p>
+        </div>`;
+
+        break;
+
+      case "private-message":
+        
+        chat.innerHTML += `
+        <div class="mensagem privado" data-identifier="message">
+          <span>(${mensagemAtual.time}) </span>
+          <p><strong>${mensagemAtual.from}</strong> reservadamente para <strong>${mensagemAtual.to}<strong> ${mensagemAtual.text}</p>
+        </div>`;
+
+        break;
+
+      case "status":
+
+        chat.innerHTML += `
+        <div class="mensagem status" data-identifier="message">
+          <span>(${mensagemAtual.time}) </span>
+          <p><strong>${mensagemAtual.from}</strong> ${mensagemAtual.text}</p>
+        </div>`;
+
+        break;
     }
   }
 }
+
+setInterval(buscarMensagens , 3000);
