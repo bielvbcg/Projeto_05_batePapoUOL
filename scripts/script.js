@@ -4,8 +4,11 @@ let name;
 
 function logarChat()
 {
-  name = prompt("Digite seu nome");
+  const input = document.querySelector(".tela-login input");
+  name = input.value;
   const promessa = axios.post(`${url}/participants` , {name});
+
+  input.value = "";
 
   promessa.then(iniciarChat);
   promessa.catch(logarChat);
@@ -13,6 +16,9 @@ function logarChat()
 
 function iniciarChat()
 {
+  const telaLogin = document.querySelector(".tela-login");
+  telaLogin.classList.toggle("escondido");
+
   buscarMensagens();
   manterConexao();
 
