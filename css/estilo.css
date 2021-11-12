@@ -7,6 +7,65 @@ body {
     font-family: Roboto;
 }
 
+.tela-login {
+    width: 100%;
+    height: 100%;
+
+    position: fixed;
+    z-index: 10;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+
+    background-color: #E5E5E5;
+}
+
+.tela-login div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding-top: 72px;
+}
+
+.logo img {
+    width: 130px;
+
+    padding-bottom: 94px;
+}
+
+.tela-login input{
+    width: 261px;
+    height: 54px;
+
+    border: 0px solid #E5E5E5;
+
+    font-size: 18px;
+    line-height: 25px;
+    
+    padding-bottom: 15px;
+}
+
+.tela-login input::placeholder {
+    text-align: center;
+    color: #AEAEAE;
+}
+
+.tela-login button {
+    width: 109px;
+    height: 45px;
+
+    border: 0px solid #E5E5E5;
+    
+    color: #696969;
+    
+    font-size: 18px;
+    line-height: 25px;
+}
+
 header {
     width: 375px;
     height: 80px;
@@ -116,4 +175,8 @@ header ion-icon {
     height: 26px;
 
     padding: 28px 18px;
+}
+
+.escondido {
+    display: none;
 }
