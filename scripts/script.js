@@ -60,11 +60,13 @@ function popularChat(promessa)
 
       case "private_message":
         
+      if (mensagemAtual.from === name || mensagemAtual.to === name){
         chat.innerHTML += `
         <div class="mensagem privado" data-identifier="message">
           <span>(${mensagemAtual.time}) </span>
           <p><strong>${mensagemAtual.from}</strong> reservadamente para <strong>${mensagemAtual.to}</strong> ${mensagemAtual.text}</p>
         </div>`;
+      }
 
         break;
 
@@ -81,4 +83,20 @@ function popularChat(promessa)
   }
   const mostrarUltimaMensagem = document.querySelector(".chat .mensagem:last-child");
   mostrarUltimaMensagem.scrollIntoView();
+}
+
+function enviarMensagem()
+{
+  const mensagem = document.querySelector(".barra-mensagens input");
+  const envio = axios.post(`${url}/messages` , {
+    from: name,
+    to: "Todos",
+    text: mensagem.value,
+    type: "message"
+  });
+
+  envio.then(buscarMensagens);
+  envio.catch(logarChat);
+
+  mensagem.value = "";
 }
