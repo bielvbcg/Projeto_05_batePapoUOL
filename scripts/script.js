@@ -32,6 +32,13 @@ function iniciarChat()
 function manterConexao()
 {
   const promessa = axios.post(`${url}/status` , {name});
+  promessa.catch(recarregarPagina);
+}
+
+function recarregarPagina()
+{
+  const telaLogin = document.querySelector(".tela-login");
+  telaLogin.classList.toggle(".escondido");
 }
 
 function buscarMensagens()
