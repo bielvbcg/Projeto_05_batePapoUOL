@@ -1,5 +1,6 @@
 const url = "https://mock-api.driven.com.br/api/v4/uol"
 let ultimaMensagem = "";
+let chatIniciado = false;
 let name;
 
 function logarChat()
@@ -18,6 +19,8 @@ function iniciarChat()
 {
   const telaLogin = document.querySelector(".tela-login");
   telaLogin.classList.toggle("escondido");
+
+  chatIniciado = true;
 
   buscarMensagens();
   manterConexao();
@@ -43,7 +46,7 @@ function popularChat(promessa)
   const chat = document.querySelector(".chat");
   const tempoMensagemNova = mensagens[mensagens.length - 1];
   
-  if (ultimaMensagem.time === tempoMensagemNova.time){return;}
+  if (ultimaMensagem.time === tempoMensagemNova.time) return;
   ultimaMensagem = mensagens[mensagens.length - 1];
 
   chat.innerHTML = "";
@@ -106,3 +109,11 @@ function enviarMensagem()
 
   mensagem.value = "";
 }
+
+document.addEventListener("keydown" , function (evento) 
+{
+  if (evento.keyCode !== 13) return;
+
+  if (chatIniciado) {enviarMensagem();}
+  else {logarChat();}
+})
