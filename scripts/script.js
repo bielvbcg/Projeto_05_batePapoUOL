@@ -11,94 +11,85 @@ function logarChat()
 
   input.value = "";
 
-  promessa.then(iniciarChat);
+  promessa.then(()=> {
+    const telaLogin = document.querySelector(".tela-login");
+    telaLogin.classList.toggle("escondido");
+  
+    chatIniciado = true;
+  
+    setInterval(buscarMensagens , 3000);
+    setInterval(()=> {
+      const promessa = axios.post(`${url}/status` , {name});
+      promessa.catch(()=> {
+        const telaLogin = document.querySelector(".tela-login");
+        telaLogin.classList.toggle(".escondido");
+      });
+    } , 5000);
+  });
+
   promessa.catch(logarChat);
 }
 
-function iniciarChat()
-{
-  const telaLogin = document.querySelector(".tela-login");
-  telaLogin.classList.toggle("escondido");
-
-  chatIniciado = true;
-
-  buscarMensagens();
-  manterConexao();
-
-  setInterval(buscarMensagens , 3000);
-  setInterval(manterConexao , 5000);
-}
-
 function manterConexao()
-{
-  const promessa = axios.post(`${url}/status` , {name});
-  promessa.catch(recarregarPagina);
-}
 
-function recarregarPagina()
-{
-  const telaLogin = document.querySelector(".tela-login");
-  telaLogin.classList.toggle(".escondido");
-}
 
 function buscarMensagens()
 {
   const promessa = axios.get(`${url}/messages`);
-  promessa.then(popularChat);
-}
 
-function popularChat(promessa)
-{
-  const mensagens = promessa.data;
-  const chat = document.querySelector(".chat");
-  const tempoMensagemNova = mensagens[mensagens.length - 1];
-  
-  if (ultimaMensagem.time === tempoMensagemNova.time) return;
-  ultimaMensagem = mensagens[mensagens.length - 1];
+  promessa.then(()=> {
 
-  chat.innerHTML = "";
-  
-  for (let i = 0 ; i < mensagens.length ; i++ )
-  {
-    const mensagemAtual = mensagens[i];
+    const mensagens = promessa.data;
+    const chat = document.querySelector(".chat");
+    const tempoMensagemNova = mensagens[mensagens.length - 1];
     
-    switch (mensagemAtual.type) 
+    if (ultimaMensagem.time === tempoMensagemNova.time) return;
+    ultimaMensagem = mensagens[mensagens.length - 1];
+  
+    chat.innerHTML = "";
+    
+    for (let i = 0 ; i < mensagens.length ; i++ )
     {
-      case "message":
-        
-        chat.innerHTML += `
-        <div class="mensagem" data-identifier="message">
-          <span>(${mensagemAtual.time}) </span>
-          <p><strong>${mensagemAtual.from}</strong> Para <strong>${mensagemAtual.to}</strong>: ${mensagemAtual.text}</p>
-        </div>`;
-
-        break;
-
-      case "private_message":
-        
-      if (mensagemAtual.from === name || mensagemAtual.to === name){
-        chat.innerHTML += `
-        <div class="mensagem privado" data-identifier="message">
-          <span>(${mensagemAtual.time}) </span>
-          <p><strong>${mensagemAtual.from}</strong> reservadamente para <strong>${mensagemAtual.to}</strong> ${mensagemAtual.text}</p>
-        </div>`;
+      const mensagemAtual = mensagens[i];
+      
+      switch (mensagemAtual.type) 
+      {
+        case "message":
+          
+          chat.innerHTML += `
+          <div class="mensagem" data-identifier="message">
+            <span>(${mensagemAtual.time}) </span>
+            <p><strong>${mensagemAtual.from}</strong> Para <strong>${mensagemAtual.to}</strong>: ${mensagemAtual.text}</p>
+          </div>`;
+  
+          break;
+  
+        case "private_message":
+          
+        if (mensagemAtual.from === name || mensagemAtual.to === name){
+          chat.innerHTML += `
+          <div class="mensagem privado" data-identifier="message">
+            <span>(${mensagemAtual.time}) </span>
+            <p><strong>${mensagemAtual.from}</strong> reservadamente para <strong>${mensagemAtual.to}</strong> ${mensagemAtual.text}</p>
+          </div>`;
+        }
+  
+          break;
+  
+        case "status":
+  
+          chat.innerHTML += `
+          <div class="mensagem status" data-identifier="message">
+            <span>(${mensagemAtual.time}) </span>
+            <p><strong>${mensagemAtual.from}</strong> ${mensagemAtual.text}</p>
+          </div>`;
+  
+          break;
       }
-
-        break;
-
-      case "status":
-
-        chat.innerHTML += `
-        <div class="mensagem status" data-identifier="message">
-          <span>(${mensagemAtual.time}) </span>
-          <p><strong>${mensagemAtual.from}</strong> ${mensagemAtual.text}</p>
-        </div>`;
-
-        break;
     }
-  }
-  const mostrarUltimaMensagem = document.querySelector(".chat .mensagem:last-child");
-  mostrarUltimaMensagem.scrollIntoView();
+    const mostrarUltimaMensagem = document.querySelector(".chat .mensagem:last-child");
+    mostrarUltimaMensagem.scrollIntoView();
+  });
 }
 
 function enviarMensagem()
